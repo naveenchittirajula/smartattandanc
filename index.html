@@ -103,10 +103,11 @@
                     </div>
 
                     <div class="qr-container">
-                        <p>Your Attendance QR Code</p>
-                        <div class="qr-box">
+                        <p>Your Attendance QR Code <span id="qrTimer" style="color: var(--secondary); font-weight: 500; font-size: 12px; margin-left: 5px;">(Expires in 06:30)</span></p>
+                        <div class="qr-box" id="qrBox" style="transition: all 0.3s ease;">
                             <i class="fas fa-qrcode"></i>
                         </div>
+                        <p id="qrExpiredMessage" style="display: none; color: #ef4444; margin-top: 10px; font-weight: 600;">QR Code Expired</p>
                     </div>
                 </div>
 

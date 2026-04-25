@@ -5,6 +5,9 @@ const profileSection = document.getElementById('profileSection');
 const profileBackground = document.getElementById('profileBackground');
 const bgShapes = document.getElementById('bgShapes');
 
+// Timer variables
+let qrTimerInterval;
+
 // Navigation functions
 function hideAllSections() {
     loginSection.classList.remove('active');
@@ -51,8 +54,45 @@ function showProfile(name, role) {
 
     setTimeout(() => {
         profileSection.style.display = 'block';
-        setTimeout(() => profileSection.classList.add('active'), 50);
+        setTimeout(() => {
+            profileSection.classList.add('active');
+            startQrTimer();
+        }, 50);
     }, 400);
+}
+
+function startQrTimer() {
+    clearInterval(qrTimerInterval);
+    let timeLeft = 390; // 390 seconds = 6m 30s
+    const timerDisplay = document.getElementById('qrTimer');
+    const qrBox = document.getElementById('qrBox');
+    const expiredMsg = document.getElementById('qrExpiredMessage');
+    
+    if(!timerDisplay || !qrBox || !expiredMsg) return;
+    
+    qrBox.style.opacity = '1';
+    qrBox.style.pointerEvents = 'auto';
+    expiredMsg.style.display = 'none';
+    
+    // Initial display
+    const initMin = Math.floor(timeLeft / 60);
+    const initSec = timeLeft % 60;
+    timerDisplay.innerText = `(Expires in ${initMin}:${initSec.toString().padStart(2, '0')})`;
+    
+    qrTimerInterval = setInterval(() => {
+        timeLeft--;
+        const minutes = Math.floor(timeLeft / 60);
+        const seconds = timeLeft % 60;
+        timerDisplay.innerText = `(Expires in ${minutes}:${seconds.toString().padStart(2, '0')})`;
+        
+        if (timeLeft <= 0) {
+            clearInterval(qrTimerInterval);
+            timerDisplay.innerText = `(Expired)`;
+            qrBox.style.opacity = '0.2';
+            qrBox.style.pointerEvents = 'none';
+            expiredMsg.style.display = 'block';
+        }
+    }, 1000);
 }
 
 function logout() {
@@ -63,6 +103,8 @@ function logout() {
     // Clear inputs
     document.getElementById('loginEmail').value = '';
     document.getElementById('loginPassword').value = '';
+    
+    clearInterval(qrTimerInterval);
     
     showLogin();
 }
