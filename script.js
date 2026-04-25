@@ -1,4 +1,40 @@
 // DOM Elements
+// Local Database Service (Mocking Backend)
+const db = {
+    saveUser: function(name, email, role) {
+        let users = JSON.parse(localStorage.getItem('attendance_users')) || [];
+        const exists = users.find(u => u.email === email);
+        if(!exists) {
+            users.push({ name, email, role, createdAt: new Date().toISOString() });
+            localStorage.setItem('attendance_users', JSON.stringify(users));
+            console.log("DB: User registered", name);
+        }
+    },
+    getUser: function(email) {
+        let users = JSON.parse(localStorage.getItem('attendance_users')) || [];
+        return users.find(u => u.email === email);
+    },
+    markAttendance: function() {
+        const email = document.getElementById('loginEmail').value || document.getElementById('registerEmail').value || 'Unknown User';
+        const locElement = document.getElementById('deviceLocation');
+        const ipElement = document.getElementById('deviceIp');
+        
+        let location = locElement ? locElement.innerText.trim() : "Unknown";
+        let ip = ipElement ? ipElement.innerText.trim() : "Unknown";
+
+        let records = JSON.parse(localStorage.getItem('attendance_records')) || [];
+        records.push({
+            email,
+            status: "Present",
+            timestamp: new Date().toISOString(),
+            location,
+            ipAddress: ip
+        });
+        localStorage.setItem('attendance_records', JSON.stringify(records));
+        console.log("DB: Attendance recorded for", email);
+    }
+};
+
 const loginSection = document.getElementById('loginSection');
 const registerSection = document.getElementById('registerSection');
 const profileSection = document.getElementById('profileSection');
@@ -235,6 +271,9 @@ function simulateScan() {
         statusEl.style.color = '#10B981';
         statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Present`;
     }
+    
+    // Save to Database
+    db.markAttendance();
 }
 
 // Logic implementations
@@ -249,6 +288,10 @@ function login() {
     const name = email.split('@')[0].replace(/[^a-zA-Z]/g, ' ');
     const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
     
+    const user = db.getUser(email);
+    const finalName = user ? user.name : (formattedName || "Student");
+    const finalRole = user ? user.role : "student";
+    
     // Animate button
     btnText.innerText = 'Logging in...';
     btnIcon.className = 'fas fa-circle-notch fa-spin';
@@ -259,7 +302,7 @@ function login() {
         btnIcon.className = 'fas fa-arrow-right';
         
         // Navigate to profile
-        showProfile(formattedName || "Student", "student", email);
+        showProfile(finalName, finalRole, email);
     }, 1200);
 }
 
@@ -281,6 +324,9 @@ function register() {
         // Reset button
         btnText.innerText = 'Create Account';
         btnIcon.className = 'fas fa-check';
+        
+        // Save to Database
+        db.saveUser(name, email, role);
         
         // Alert and navigate
         alert('Account created successfully! Logging you in...');
