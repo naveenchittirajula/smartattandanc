@@ -26,6 +26,8 @@ body {
     align-items: center;
     position: relative;
     overflow: hidden;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 /* Backgrounds */

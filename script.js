@@ -98,6 +98,17 @@ function showProfile(name, role) {
         locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #ef4444;"></i> Not Supported`;
     }
 
+    // Detect IP (Anti-Cheat)
+    const ipElement = document.getElementById('deviceIp');
+    fetch('https://api.ipify.org?format=json')
+        .then(response => response.json())
+        .then(data => {
+            ipElement.innerHTML = `<i class="fas fa-network-wired" style="color: #10B981;"></i> IP: ${data.ip}`;
+        })
+        .catch(err => {
+            ipElement.innerHTML = `<i class="fas fa-network-wired" style="color: #ef4444;"></i> Network Error`;
+        });
+
     hideAllSections();
     
     // Fade in background image and hide floating shapes
@@ -227,4 +238,36 @@ document.querySelectorAll('input, select').forEach(element => {
             icon.style.color = 'var(--text-muted)';
         }
     });
+});
+
+// Anti-Cheating: Tab Visibility Monitoring
+document.addEventListener("visibilitychange", function() {
+    if (document.visibilityState === 'hidden' && qrTimerInterval) {
+        // User switched tabs while timer is running! Invalidate QR
+        clearInterval(qrTimerInterval);
+        const timerDisplay = document.getElementById('qrTimer');
+        const qrBox = document.getElementById('qrBox');
+        const expiredMsg = document.getElementById('qrExpiredMessage');
+        
+        if(timerDisplay && qrBox && expiredMsg) {
+            timerDisplay.innerText = `(Invalidated: Tab Switched!)`;
+            timerDisplay.style.color = '#ef4444';
+            qrBox.style.opacity = '0.2';
+            qrBox.style.pointerEvents = 'none';
+            expiredMsg.innerText = 'WARNING: Proxy attendance attempt detected. QR Code Invalidated.';
+            expiredMsg.style.display = 'block';
+        }
+    }
+});
+
+// Anti-Cheating: UI Lockdown
+document.addEventListener('contextmenu', event => event.preventDefault()); // Disable right click
+document.addEventListener('keydown', function(e) {
+    // Disable F12, Ctrl+Shift+I, Ctrl+Shift+J, Ctrl+U
+    if(e.key === 'F12' || 
+      (e.ctrlKey && e.shiftKey && (e.key === 'I' || e.key === 'J' || e.key === 'C')) || 
+      (e.ctrlKey && (e.key === 'U' || e.key === 'S' || e.key === 'P'))) {
+        e.preventDefault();
+        alert("Anti-Cheating: Developer tools and saving are disabled.");
+    }
 });
