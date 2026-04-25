@@ -96,10 +96,13 @@ function showProfile(name, role, email) {
                     const data = await response.json();
                     let locationName = "Unknown Location";
                     if (data && data.address) {
+                        const road = data.address.road || data.address.pedestrian || "";
                         const localArea = data.address.suburb || data.address.neighbourhood || data.address.residential || data.address.village || data.address.city_district || "";
                         const city = data.address.city || data.address.town || data.address.county || "";
                         
-                        if (localArea && city) {
+                        if (road && localArea) {
+                            locationName = `${road}, ${localArea}`;
+                        } else if (localArea && city) {
                             locationName = `${localArea}, ${city}`;
                         } else if (localArea || city) {
                             locationName = localArea || city;
@@ -113,9 +116,9 @@ function showProfile(name, role, email) {
                 }
             },
             (error) => {
-                locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #ef4444;"></i> Location Denied`;
+                locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #ef4444;"></i> Location Denied/Error`;
             },
-            { timeout: 10000 }
+            { enableHighAccuracy: true, timeout: 15000, maximumAge: 0 }
         );
     } else {
         locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #ef4444;"></i> Not Supported`;
