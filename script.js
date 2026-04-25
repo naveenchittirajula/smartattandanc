@@ -46,6 +46,19 @@ function showProfile(name, role) {
     const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "Student")}&background=random&color=fff&size=80`;
     document.getElementById('profileAvatar').src = avatarUrl;
 
+    // Detect device details
+    const platform = navigator.platform || 'Unknown OS';
+    const ua = navigator.userAgent;
+    let browser = "Unknown Browser";
+    
+    if(ua.includes("Firefox")) browser = "Firefox";
+    else if(ua.includes("Edg")) browser = "Edge";
+    else if(ua.includes("Chrome")) browser = "Chrome";
+    else if(ua.includes("Safari")) browser = "Safari";
+    
+    document.getElementById('devicePlatform').innerHTML = `<i class="fas fa-mobile-alt"></i> ${platform}`;
+    document.getElementById('deviceBrowser').innerHTML = `<i class="fas fa-globe"></i> ${browser}`;
+
     hideAllSections();
     
     // Fade in background image and hide floating shapes

@@ -165,18 +165,28 @@ body {
     margin-bottom: 25px;
 }
 
-.status-box {
+.status-box, .device-box {
     background: rgba(255,255,255,0.03);
     border-radius: 12px;
     padding: 15px;
     margin-bottom: 15px;
     border: 1px solid rgba(255,255,255,0.05);
+    text-align: left;
 }
 
-.status-box h3 {
+.status-box h3, .device-box h3 {
     font-size: 14px;
     color: var(--text-muted);
     margin-bottom: 5px;
+}
+
+.device-box p {
+    font-size: 15px;
+    color: white;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
 
 .status.present {
