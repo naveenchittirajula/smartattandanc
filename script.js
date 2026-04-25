@@ -136,19 +136,23 @@ function showProfile(name, role, email) {
                         const localArea = data.address.suburb || data.address.neighbourhood || data.address.residential || data.address.village || data.address.city_district || "";
                         const city = data.address.city || data.address.town || data.address.county || "";
                         
+                        let placeName = "";
                         if (road && localArea) {
-                            locationName = `${road}, ${localArea}`;
+                            placeName = `${road}, ${localArea}`;
                         } else if (localArea && city) {
-                            locationName = `${localArea}, ${city}`;
+                            placeName = `${localArea}, ${city}`;
                         } else if (localArea || city) {
-                            locationName = localArea || city;
+                            placeName = localArea || city;
                         } else {
-                            locationName = data.address.state || "Location Found";
+                            placeName = data.address.state || "Location Found";
                         }
+                        
+                        // Give the most accurate location by including exact coordinates
+                        locationName = `${placeName} (Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)})`;
                     }
                     locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #10B981;"></i> ${locationName}`;
                 } catch(e) {
-                    locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #10B981;"></i> Location Found`;
+                    locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #10B981;"></i> Lat: ${lat.toFixed(4)}, Lon: ${lon.toFixed(4)}`;
                 }
             },
             (error) => {
