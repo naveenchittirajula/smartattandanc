@@ -4,8 +4,8 @@
     --secondary: #06B6D4;
     --text-main: #FFFFFF;
     --text-muted: #9CA3AF;
-    --bg-dark: #0B0F19;
-    --glass-bg: rgba(17, 24, 39, 0.75);
+    --bg-dark: #0f172a;
+    --glass-bg: rgba(15, 23, 42, 0.75);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
