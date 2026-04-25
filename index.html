@@ -5,43 +5,86 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Smart Attendance System</title>
     <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
     <div class="container">
         <!-- Login Section -->
         <div id="loginSection" class="section active">
-            <div class="card">
-                <h2><i class="fas fa-user-check"></i> Smart Attendance System</h2>
-                <div class="form-group">
-                    <input type="email" id="loginEmail" placeholder="Email" required>
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="icon-circle">
+                        <i class="fas fa-fingerprint"></i>
+                    </div>
+                    <h2>Smart Attendance</h2>
+                    <p>Welcome back! Please login.</p>
                 </div>
                 <div class="form-group">
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="loginEmail" placeholder="Email Address" required>
+                </div>
+                <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
                     <input type="password" id="loginPassword" placeholder="Password" required>
                 </div>
-                <button onclick="login()" class="btn-primary">Login</button>
-                <p>Don't have an account? <a href="#" onclick="showRegister()">Register</a></p>
+                <button onclick="login()" class="btn-primary">
+                    <span>Login</span>
+                    <i class="fas fa-arrow-right"></i>
+                </button>
+                <div class="card-footer">
+                    <p>Don't have an account? <a href="#" onclick="showRegister()">Register Here</a></p>
+                </div>
             </div>
         </div>
 
         <!-- Register Section -->
         <div id="registerSection" class="section">
-            <div class="card">
-                <h2><i class="fas fa-user-plus"></i> Register</h2>
+            <div class="glass-card">
+                <div class="card-header">
+                    <div class="icon-circle register-icon">
+                        <i class="fas fa-user-plus"></i>
+                    </div>
+                    <h2>Create Account</h2>
+                    <p>Join the Smart Attendance System</p>
+                </div>
                 <div class="form-group">
+                    <i class="fas fa-user input-icon"></i>
                     <input type="text" id="registerName" placeholder="Full Name" required>
                 </div>
                 <div class="form-group">
-                    <input type="email" id="registerEmail" placeholder="Email" required>
+                    <i class="fas fa-envelope input-icon"></i>
+                    <input type="email" id="registerEmail" placeholder="Email Address" required>
                 </div>
                 <div class="form-group">
+                    <i class="fas fa-lock input-icon"></i>
                     <input type="password" id="registerPassword" placeholder="Password" required>
                 </div>
                 <div class="form-group">
+                    <i class="fas fa-id-badge input-icon"></i>
                     <select id="registerRole">
+                        <option value="" disabled selected>Select Role</option>
                         <option value="student">Student</option>
                         <option value="teacher">Teacher</option>
                     </select>
                 </div>
-                <button onclick="register()" class="btn-primary">Register</button>
-                <p>Already have an account? <a href="#" onclick="showLogin()">Login
+                <button onclick="register()" class="btn-primary register-btn">
+                    <span>Create Account</span>
+                    <i class="fas fa-check"></i>
+                </button>
+                <div class="card-footer">
+                    <p>Already have an account? <a href="#" onclick="showLogin()">Login Here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
