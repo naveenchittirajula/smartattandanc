@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scanner - Smart Attendance</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="background-shapes">
+        <div class="shape shape-1"></div>
+        <div class="shape shape-2"></div>
+        <div class="shape shape-3"></div>
+    </div>
+
+    <div class="container">
+        <div class="glass-card" style="text-align: center;">
+            <div class="icon-circle" style="background: linear-gradient(135deg, #10B981, #059669); box-shadow: 0 10px 20px rgba(16, 185, 129, 0.3);">
+                <i class="fas fa-qrcode"></i>
+            </div>
+            <h2 id="scanTitle">Processing Scan...</h2>
+            <p id="scanDesc" style="color: var(--text-muted); margin-bottom: 20px;">Please wait while we verify the attendance record.</p>
+            
+            <div id="studentDetails" style="display: none; background: rgba(255,255,255,0.05); padding: 15px; border-radius: 12px; margin-top: 20px; text-align: left; border: 1px solid rgba(255,255,255,0.1);">
+                <p style="margin-bottom: 8px; font-size: 15px;"><strong style="color: white; margin-right: 5px;">Student:</strong> <span id="studentName" style="color: var(--text-muted);"></span></p>
+                <p style="margin-bottom: 8px; font-size: 15px;"><strong style="color: white; margin-right: 5px;">Email:</strong> <span id="studentEmail" style="color: var(--text-muted);"></span></p>
+                <p style="margin-bottom: 8px; font-size: 15px;"><strong style="color: white; margin-right: 5px;">Time:</strong> <span id="scanTime" style="color: var(--text-muted);"></span></p>
+                <div style="background: rgba(16, 185, 129, 0.1); border: 1px solid rgba(16, 185, 129, 0.3); border-radius: 8px; padding: 10px; margin-top: 15px; text-align: center;">
+                    <p style="color: #10B981; font-weight: 600; font-size: 16px;"><i class="fas fa-check-circle"></i> Marked Present</p>
+                </div>
+            </div>
+            
+            <a href="index.html" class="btn-primary" style="margin-top: 30px; text-decoration: none; justify-content: center;">Back to Dashboard</a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const params = new URLSearchParams(window.location.search);
+            const email = params.get('email');
+            const name = params.get('name');
+            
+            const title = document.getElementById('scanTitle');
+            const desc = document.getElementById('scanDesc');
+            const details = document.getElementById('studentDetails');
+            const icon = document.querySelector('.icon-circle i');
+            
+            if (email && name) {
+                // Simulate processing delay for scanning effect
+                setTimeout(() => {
+                    icon.className = 'fas fa-check-double';
+                    title.innerText = "Scan Successful!";
+                    title.style.color = "#10B981";
+                    desc.innerText = "Attendance has been securely recorded on this device.";
+                    
+                    document.getElementById('studentName').innerText = decodeURIComponent(name);
+                    document.getElementById('studentEmail').innerText = decodeURIComponent(email);
+                    document.getElementById('scanTime').innerText = new Date().toLocaleTimeString();
+                    
+                    details.style.display = 'block';
+                    
+                    // Save to local database (Teacher's device)
+                    let records = JSON.parse(localStorage.getItem('attendance_records')) || [];
+                    records.push({
+                        email: decodeURIComponent(email),
+                        status: "Present",
+                        timestamp: new Date().toISOString(),
+                        location: "Scanned via External Device",
+                        ipAddress: "N/A"
+                    });
+                    localStorage.setItem('attendance_records', JSON.stringify(records));
+                }, 1500); 
+            } else {
+                icon.className = 'fas fa-times-circle';
+                icon.parentElement.style.background = 'linear-gradient(135deg, #ef4444, #b91c1c)';
+                title.innerText = "Invalid QR Code";
+                title.style.color = "#ef4444";
+                desc.innerText = "This QR code does not contain valid student data.";
+            }
+        });
+    </script>
+</body>
+</html>

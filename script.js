@@ -14,8 +14,10 @@ const db = {
         let users = JSON.parse(localStorage.getItem('attendance_users')) || [];
         return users.find(u => u.email === email);
     },
-    markAttendance: function() {
-        const email = document.getElementById('loginEmail').value || document.getElementById('registerEmail').value || 'Unknown User';
+    markAttendance: function(email, status) {
+        if (!email) email = document.getElementById('loginEmail').value || document.getElementById('registerEmail').value || 'Unknown User';
+        if (!status) status = "Present";
+
         const locElement = document.getElementById('deviceLocation');
         const ipElement = document.getElementById('deviceIp');
         
@@ -25,13 +27,13 @@ const db = {
         let records = JSON.parse(localStorage.getItem('attendance_records')) || [];
         records.push({
             email,
-            status: "Present",
+            status: status,
             timestamp: new Date().toISOString(),
             location,
             ipAddress: ip
         });
         localStorage.setItem('attendance_records', JSON.stringify(records));
-        console.log("DB: Attendance recorded for", email);
+        console.log(`DB: Attendance recorded for ${email} as ${status}`);
     }
 };
 
@@ -83,7 +85,7 @@ function showProfile(name, role, email) {
     document.getElementById('profileAvatar').src = avatarUrl;
 
     // Generate unique dynamic QR code for the student
-    const qrData = encodeURIComponent(`user:${email}|name:${name}|role:${role}`);
+    const qrData = encodeURIComponent(`https://naveenchittirajula.github.io/smartattandanc/scan.html?email=${encodeURIComponent(email)}&name=${encodeURIComponent(name)}`);
     const qrImage = document.getElementById('dynamicQRCode');
     const qrPlaceholder = document.getElementById('qrPlaceholder');
     
@@ -217,9 +219,20 @@ function startQrTimer() {
         if (timeLeft <= 0) {
             clearInterval(qrTimerInterval);
             timerDisplay.innerText = `(Expired)`;
+            timerDisplay.style.color = '#ef4444';
             qrBox.style.opacity = '0.2';
             qrBox.style.pointerEvents = 'none';
             expiredMsg.style.display = 'block';
+            
+            // Mark as Absent
+            const statusEl = document.getElementById('attendanceStatus');
+            if(statusEl && statusEl.classList.contains('pending')) {
+                statusEl.className = 'status absent';
+                statusEl.style.color = '#ef4444';
+                statusEl.innerHTML = `<i class="fas fa-times-circle"></i> Absent`;
+                const userEmail = document.getElementById('loginEmail').value || document.getElementById('registerEmail').value;
+                db.markAttendance(userEmail, "Absent");
+            }
         }
     }, 1000);
 }
@@ -277,7 +290,8 @@ function simulateScan() {
     }
     
     // Save to Database
-    db.markAttendance();
+    const email = document.getElementById('loginEmail').value || document.getElementById('registerEmail').value;
+    db.markAttendance(email, "Present");
 }
 
 // Logic implementations
