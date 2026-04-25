@@ -35,7 +35,7 @@ function showLogin() {
     }, 400);
 }
 
-function showProfile(name, role) {
+function showProfile(name, role, email) {
     // Update profile data
     document.getElementById('profileNameDisplay').innerText = name || "Student";
     const roleText = role === "teacher" ? "Teacher" : "Student";
@@ -45,6 +45,17 @@ function showProfile(name, role) {
     // Set avatar based on name
     const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "Student")}&background=random&color=fff&size=80`;
     document.getElementById('profileAvatar').src = avatarUrl;
+
+    // Generate unique dynamic QR code for the student
+    const qrData = encodeURIComponent(`user:${email}|name:${name}|role:${role}`);
+    const qrImage = document.getElementById('dynamicQRCode');
+    const qrPlaceholder = document.getElementById('qrPlaceholder');
+    
+    if (qrImage && qrPlaceholder) {
+        qrImage.src = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${qrData}`;
+        qrImage.style.display = 'block';
+        qrPlaceholder.style.display = 'none';
+    }
 
     // Detect device details
     const platform = navigator.platform || 'Unknown OS';
@@ -167,6 +178,15 @@ function logout() {
     document.getElementById('loginEmail').value = '';
     document.getElementById('loginPassword').value = '';
     
+    // Reset QR Code
+    const qrImage = document.getElementById('dynamicQRCode');
+    const qrPlaceholder = document.getElementById('qrPlaceholder');
+    if (qrImage && qrPlaceholder) {
+        qrImage.src = '';
+        qrImage.style.display = 'none';
+        qrPlaceholder.style.display = 'block';
+    }
+    
     clearInterval(qrTimerInterval);
     
     showLogin();
@@ -194,7 +214,7 @@ function login() {
         btnIcon.className = 'fas fa-arrow-right';
         
         // Navigate to profile
-        showProfile(formattedName || "Student", "student");
+        showProfile(formattedName || "Student", "student", email);
     }, 1200);
 }
 
@@ -219,7 +239,7 @@ function register() {
         
         // Alert and navigate
         alert('Account created successfully! Logging you in...');
-        showProfile(name, role);
+        showProfile(name, role, email);
     }, 1500);
 }
 
