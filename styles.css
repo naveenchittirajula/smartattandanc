@@ -5,9 +5,9 @@
     --text-main: #FFFFFF;
     --text-muted: #9CA3AF;
     --bg-dark: #0B0F19;
-    --glass-bg: rgba(17, 24, 39, 0.7);
+    --glass-bg: rgba(17, 24, 39, 0.75);
     --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 * {
@@ -28,13 +28,27 @@ body {
     overflow: hidden;
 }
 
-/* Dynamic Background Shapes */
+/* Backgrounds */
 .background-shapes {
     position: absolute;
     width: 100vw;
     height: 100vh;
-    z-index: -1;
+    z-index: -2;
     overflow: hidden;
+    transition: opacity 0.5s ease;
+}
+
+.profile-background {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: url('bg.png') no-repeat center center/cover;
+    z-index: -1;
+    opacity: 0;
+    transition: opacity 1s ease;
+    filter: brightness(0.4) blur(3px); /* Darken so text is legible */
 }
 
 .shape {
@@ -82,6 +96,7 @@ body {
     max-width: 450px;
     padding: 20px;
     position: relative;
+    z-index: 10;
 }
 
 .section {
@@ -106,8 +121,8 @@ body {
 /* Glassmorphism Card */
 .glass-card {
     background: var(--glass-bg);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid var(--glass-border);
     box-shadow: var(--glass-shadow);
     border-radius: 24px;
@@ -115,146 +130,141 @@ body {
     text-align: center;
 }
 
-/* Header Elements */
-.card-header {
-    margin-bottom: 30px;
+/* Profile Specific Styles */
+.profile-card {
+    padding: 30px;
 }
 
-.icon-circle {
-    width: 64px;
-    height: 64px;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
+.profile-header {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+
+.profile-avatar {
+    width: 80px;
+    height: 80px;
     border-radius: 50%;
+    border: 3px solid var(--primary);
+    margin-bottom: 15px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+}
+
+.role-badge {
+    display: inline-block;
+    background: rgba(79, 70, 229, 0.2);
+    color: #A5B4FC;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 13px;
+    margin-top: 5px;
+    border: 1px solid rgba(79, 70, 229, 0.5);
+}
+
+.dashboard-content {
+    margin-bottom: 25px;
+}
+
+.status-box {
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 15px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.status-box h3 {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 5px;
+}
+
+.status.present {
+    color: #10B981;
+    font-weight: 600;
+    font-size: 18px;
+}
+
+.qr-container {
+    background: rgba(255,255,255,0.03);
+    border-radius: 12px;
+    padding: 20px;
+    border: 1px solid rgba(255,255,255,0.05);
+}
+
+.qr-container p {
+    font-size: 14px;
+    color: var(--text-muted);
+    margin-bottom: 15px;
+}
+
+.qr-box {
+    width: 150px;
+    height: 150px;
+    background: white;
+    border-radius: 12px;
+    margin: 0 auto;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin: 0 auto 20px;
-    font-size: 28px;
-    color: white;
-    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+    font-size: 80px;
+    color: #111827;
 }
 
+/* Header Elements (Login/Register) */
+.card-header { margin-bottom: 30px; }
+.icon-circle {
+    width: 64px; height: 64px;
+    background: linear-gradient(135deg, var(--primary), var(--secondary));
+    border-radius: 50%;
+    display: flex; justify-content: center; align-items: center;
+    margin: 0 auto 20px; font-size: 28px; color: white;
+    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.3);
+}
 .register-icon {
     background: linear-gradient(135deg, #8B5CF6, #EC4899);
     box-shadow: 0 10px 20px rgba(139, 92, 246, 0.3);
 }
-
-h2 {
-    font-size: 28px;
-    font-weight: 600;
-    margin-bottom: 8px;
-    letter-spacing: -0.5px;
-}
-
-.card-header p {
-    color: var(--text-muted);
-    font-size: 15px;
-    font-weight: 300;
-}
+h2 { font-size: 28px; font-weight: 600; margin-bottom: 8px; letter-spacing: -0.5px; }
+.card-header p { color: var(--text-muted); font-size: 15px; font-weight: 300; }
 
 /* Form Inputs */
-.form-group {
-    position: relative;
-    margin-bottom: 20px;
-    text-align: left;
-}
-
+.form-group { position: relative; margin-bottom: 20px; text-align: left; }
 .input-icon {
-    position: absolute;
-    left: 16px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    transition: color 0.3s ease;
+    position: absolute; left: 16px; top: 50%; transform: translateY(-50%);
+    color: var(--text-muted); transition: color 0.3s ease;
 }
-
 input, select {
-    width: 100%;
-    background: rgba(255, 255, 255, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 14px 14px 14px 45px;
-    color: white;
-    font-size: 15px;
-    outline: none;
-    transition: all 0.3s ease;
+    width: 100%; background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 12px;
+    padding: 14px 14px 14px 45px; color: white; font-size: 15px;
+    outline: none; transition: all 0.3s ease;
 }
-
-select {
-    appearance: none;
-    cursor: pointer;
-}
-
-select option {
-    background: var(--bg-dark);
-    color: white;
-}
-
+select { appearance: none; cursor: pointer; }
+select option { background: var(--bg-dark); color: white; }
 input:focus, select:focus {
-    background: rgba(255, 255, 255, 0.08);
-    border-color: var(--primary);
+    background: rgba(255, 255, 255, 0.08); border-color: var(--primary);
     box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
 }
+input:focus + .input-icon, select:focus + .input-icon { color: var(--primary); }
+input::placeholder { color: var(--text-muted); }
 
-input:focus + .input-icon, select:focus + .input-icon {
-    color: var(--primary);
+/* Buttons */
+.btn-primary, .btn-secondary {
+    width: 100%; color: white; border: none; border-radius: 12px;
+    padding: 16px; font-size: 16px; font-weight: 600; cursor: pointer;
+    display: flex; justify-content: center; align-items: center; gap: 10px;
+    transition: all 0.3s ease; margin-top: 10px;
 }
+.btn-primary { background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+.register-btn { background: linear-gradient(135deg, #8B5CF6, #EC4899); }
+.btn-secondary { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); }
 
-input::placeholder {
-    color: var(--text-muted);
-}
-
-/* Button */
-.btn-primary {
-    width: 100%;
-    background: linear-gradient(135deg, var(--primary), var(--secondary));
-    color: white;
-    border: none;
-    border-radius: 12px;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 10px;
-    transition: all 0.3s ease;
-    margin-top: 10px;
-}
-
-.register-btn {
-    background: linear-gradient(135deg, #8B5CF6, #EC4899);
-}
-
-.btn-primary:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4);
-}
-
-.register-btn:hover {
-    box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4);
-}
-
-.btn-primary:active {
-    transform: translateY(0);
-}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(79, 70, 229, 0.4); }
+.register-btn:hover { box-shadow: 0 10px 20px rgba(139, 92, 246, 0.4); }
+.btn-secondary:hover { background: rgba(255,255,255,0.15); transform: translateY(-2px); }
 
 /* Footer links */
-.card-footer {
-    margin-top: 25px;
-    font-size: 14px;
-    color: var(--text-muted);
-}
-
-.card-footer a {
-    color: var(--secondary);
-    text-decoration: none;
-    font-weight: 500;
-    transition: color 0.3s ease;
-}
-
-.card-footer a:hover {
-    color: white;
-    text-decoration: underline;
-}
+.card-footer { margin-top: 25px; font-size: 14px; color: var(--text-muted); }
+.card-footer a { color: var(--secondary); text-decoration: none; font-weight: 500; transition: color 0.3s ease; }
+.card-footer a:hover { color: white; text-decoration: underline; }

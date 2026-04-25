@@ -1,45 +1,96 @@
 // DOM Elements
 const loginSection = document.getElementById('loginSection');
 const registerSection = document.getElementById('registerSection');
+const profileSection = document.getElementById('profileSection');
+const profileBackground = document.getElementById('profileBackground');
+const bgShapes = document.getElementById('bgShapes');
 
-// Toggle between sections
-function showRegister() {
+// Navigation functions
+function hideAllSections() {
     loginSection.classList.remove('active');
-    setTimeout(() => {
-        loginSection.style.display = 'none';
-        registerSection.style.display = 'block';
-        setTimeout(() => {
-            registerSection.classList.add('active');
-        }, 50);
-    }, 400); // Matches CSS transition duration
+    registerSection.classList.remove('active');
+    profileSection.classList.remove('active');
+    
+    loginSection.style.display = 'none';
+    registerSection.style.display = 'none';
+    profileSection.style.display = 'none';
 }
 
-function showLogin() {
-    registerSection.classList.remove('active');
+function showRegister() {
+    hideAllSections();
     setTimeout(() => {
-        registerSection.style.display = 'none';
-        loginSection.style.display = 'block';
-        setTimeout(() => {
-            loginSection.classList.add('active');
-        }, 50);
+        registerSection.style.display = 'block';
+        setTimeout(() => registerSection.classList.add('active'), 50);
     }, 400);
 }
 
-// Dummy functions for form submission
+function showLogin() {
+    hideAllSections();
+    setTimeout(() => {
+        loginSection.style.display = 'block';
+        setTimeout(() => loginSection.classList.add('active'), 50);
+    }, 400);
+}
+
+function showProfile(name, role) {
+    // Update profile data
+    document.getElementById('profileNameDisplay').innerText = name || "Student";
+    const roleText = role === "teacher" ? "Teacher" : "Student";
+    const roleIcon = role === "teacher" ? "fa-chalkboard-teacher" : "fa-graduation-cap";
+    document.getElementById('profileRoleDisplay').innerHTML = `<i class="fas ${roleIcon}"></i> ${roleText}`;
+    
+    // Set avatar based on name
+    const avatarUrl = `https://ui-avatars.com/api/?name=${encodeURIComponent(name || "Student")}&background=random&color=fff&size=80`;
+    document.getElementById('profileAvatar').src = avatarUrl;
+
+    hideAllSections();
+    
+    // Fade in background image and hide floating shapes
+    profileBackground.style.opacity = '1';
+    bgShapes.style.opacity = '0';
+
+    setTimeout(() => {
+        profileSection.style.display = 'block';
+        setTimeout(() => profileSection.classList.add('active'), 50);
+    }, 400);
+}
+
+function logout() {
+    // Hide background image and show floating shapes
+    profileBackground.style.opacity = '0';
+    bgShapes.style.opacity = '1';
+    
+    // Clear inputs
+    document.getElementById('loginEmail').value = '';
+    document.getElementById('loginPassword').value = '';
+    
+    showLogin();
+}
+
+// Logic implementations
 function login() {
     const email = document.getElementById('loginEmail').value;
-    const btn = document.querySelector('#loginSection .btn-primary');
+    const btnText = document.getElementById('loginBtnText');
+    const btnIcon = document.getElementById('loginBtnIcon');
     
-    if(!email) return alert("Please enter email address");
+    if(!email) return alert("Please enter your email address to login.");
+    
+    // Extract name from email for demo purposes (e.g., john@email.com -> John)
+    const name = email.split('@')[0].replace(/[^a-zA-Z]/g, ' ');
+    const formattedName = name.charAt(0).toUpperCase() + name.slice(1);
     
     // Animate button
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Logging in...';
+    btnText.innerText = 'Logging in...';
+    btnIcon.className = 'fas fa-circle-notch fa-spin';
     
     setTimeout(() => {
-        btn.innerHTML = originalContent;
-        alert('Login functionality to be implemented!');
-    }, 1500);
+        // Reset button
+        btnText.innerText = 'Login';
+        btnIcon.className = 'fas fa-arrow-right';
+        
+        // Navigate to profile
+        showProfile(formattedName || "Student", "student");
+    }, 1200);
 }
 
 function register() {
@@ -47,18 +98,23 @@ function register() {
     const email = document.getElementById('registerEmail').value;
     const role = document.getElementById('registerRole').value;
     
-    const btn = document.querySelector('#registerSection .btn-primary');
+    const btnText = document.getElementById('regBtnText');
+    const btnIcon = document.getElementById('regBtnIcon');
     
-    if(!name || !email || !role) return alert("Please fill all fields");
+    if(!name || !email || !role) return alert("Please fill all fields to create an account.");
     
     // Animate button
-    const originalContent = btn.innerHTML;
-    btn.innerHTML = '<i class="fas fa-circle-notch fa-spin"></i> Creating...';
+    btnText.innerText = 'Creating Account...';
+    btnIcon.className = 'fas fa-circle-notch fa-spin';
     
     setTimeout(() => {
-        btn.innerHTML = originalContent;
-        alert('Registration functionality to be implemented!');
-        showLogin();
+        // Reset button
+        btnText.innerText = 'Create Account';
+        btnIcon.className = 'fas fa-check';
+        
+        // Alert and navigate
+        alert('Account created successfully! Logging you in...');
+        showProfile(name, role);
     }, 1500);
 }
 

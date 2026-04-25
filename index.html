@@ -9,13 +9,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
-    <div class="background-shapes">
+    <!-- Background overlay for Profile -->
+    <div id="profileBackground" class="profile-background"></div>
+
+    <div class="background-shapes" id="bgShapes">
         <div class="shape shape-1"></div>
         <div class="shape shape-2"></div>
         <div class="shape shape-3"></div>
     </div>
 
-    <div class="container">
+    <div class="container" id="mainContainer">
         <!-- Login Section -->
         <div id="loginSection" class="section active">
             <div class="glass-card">
@@ -35,8 +38,8 @@
                     <input type="password" id="loginPassword" placeholder="Password" required>
                 </div>
                 <button onclick="login()" class="btn-primary">
-                    <span>Login</span>
-                    <i class="fas fa-arrow-right"></i>
+                    <span id="loginBtnText">Login</span>
+                    <i class="fas fa-arrow-right" id="loginBtnIcon"></i>
                 </button>
                 <div class="card-footer">
                     <p>Don't have an account? <a href="#" onclick="showRegister()">Register Here</a></p>
@@ -75,12 +78,41 @@
                     </select>
                 </div>
                 <button onclick="register()" class="btn-primary register-btn">
-                    <span>Create Account</span>
-                    <i class="fas fa-check"></i>
+                    <span id="regBtnText">Create Account</span>
+                    <i class="fas fa-check" id="regBtnIcon"></i>
                 </button>
                 <div class="card-footer">
                     <p>Already have an account? <a href="#" onclick="showLogin()">Login Here</a></p>
                 </div>
+            </div>
+        </div>
+
+        <!-- Profile / Dashboard Section -->
+        <div id="profileSection" class="section">
+            <div class="glass-card profile-card">
+                <div class="profile-header">
+                    <img src="https://ui-avatars.com/api/?name=Student&background=random&color=fff&size=80" alt="Avatar" class="profile-avatar" id="profileAvatar">
+                    <h2 id="profileNameDisplay">Student Name</h2>
+                    <p class="role-badge" id="profileRoleDisplay"><i class="fas fa-graduation-cap"></i> Student</p>
+                </div>
+                
+                <div class="dashboard-content">
+                    <div class="status-box">
+                        <h3>Today's Status</h3>
+                        <p class="status present"><i class="fas fa-check-circle"></i> Present</p>
+                    </div>
+
+                    <div class="qr-container">
+                        <p>Your Attendance QR Code</p>
+                        <div class="qr-box">
+                            <i class="fas fa-qrcode"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <button onclick="logout()" class="btn-secondary">
+                    <i class="fas fa-sign-out-alt"></i> Logout
+                </button>
             </div>
         </div>
     </div>
