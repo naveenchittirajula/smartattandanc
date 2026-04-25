@@ -57,6 +57,18 @@ function showProfile(name, role, email) {
         qrPlaceholder.style.display = 'none';
     }
 
+    // Reset status to pending
+    const statusEl = document.getElementById('attendanceStatus');
+    if(statusEl) {
+        statusEl.className = 'status pending';
+        statusEl.style.color = '#F59E0B';
+        statusEl.innerHTML = `<i class="fas fa-clock"></i> Pending Scan`;
+    }
+    
+    // Hide overlay
+    const overlay = document.getElementById('scanSuccessOverlay');
+    if(overlay) overlay.style.display = 'none';
+
     // Detect device details
     const platform = navigator.platform || 'Unknown OS';
     const ua = navigator.userAgent;
@@ -190,6 +202,36 @@ function logout() {
     clearInterval(qrTimerInterval);
     
     showLogin();
+}
+
+// Simulate scanning the QR code
+function simulateScan() {
+    if(!qrTimerInterval) return; // If timer is not running, it's either expired or already scanned
+
+    // Stop the timer
+    clearInterval(qrTimerInterval);
+    qrTimerInterval = null;
+
+    // Update Timer Text
+    const timerDisplay = document.getElementById('qrTimer');
+    if(timerDisplay) {
+        timerDisplay.innerText = `(Attendance Marked)`;
+        timerDisplay.style.color = '#10B981';
+    }
+
+    // Show Success Overlay on QR
+    const overlay = document.getElementById('scanSuccessOverlay');
+    if(overlay) {
+        overlay.style.display = 'flex';
+    }
+
+    // Update Status to Present
+    const statusEl = document.getElementById('attendanceStatus');
+    if(statusEl) {
+        statusEl.className = 'status present';
+        statusEl.style.color = '#10B981';
+        statusEl.innerHTML = `<i class="fas fa-check-circle"></i> Present`;
+    }
 }
 
 // Logic implementations
