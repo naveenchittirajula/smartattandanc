@@ -63,7 +63,7 @@ function showProfile(name, role) {
 
 function startQrTimer() {
     clearInterval(qrTimerInterval);
-    let timeLeft = 390; // 390 seconds = 6m 30s
+    let timeLeft = 45; // 45 seconds
     const timerDisplay = document.getElementById('qrTimer');
     const qrBox = document.getElementById('qrBox');
     const expiredMsg = document.getElementById('qrExpiredMessage');
