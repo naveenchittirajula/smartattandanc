@@ -59,6 +59,26 @@ function showProfile(name, role) {
     document.getElementById('devicePlatform').innerHTML = `<i class="fas fa-mobile-alt"></i> ${platform}`;
     document.getElementById('deviceBrowser').innerHTML = `<i class="fas fa-globe"></i> ${browser}`;
 
+    // Detect Location
+    const locElement = document.getElementById('deviceLocation');
+    locElement.innerHTML = `<i class="fas fa-map-marker-alt"></i> Requesting Location...`;
+    
+    if ("geolocation" in navigator) {
+        navigator.geolocation.getCurrentPosition(
+            (position) => {
+                const lat = position.coords.latitude.toFixed(4);
+                const lon = position.coords.longitude.toFixed(4);
+                locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #10B981;"></i> Lat: ${lat}, Lon: ${lon}`;
+            },
+            (error) => {
+                locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #ef4444;"></i> Location Denied`;
+            },
+            { timeout: 10000 }
+        );
+    } else {
+        locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #ef4444;"></i> Not Supported`;
+    }
+
     hideAllSections();
     
     // Fade in background image and hide floating shapes
