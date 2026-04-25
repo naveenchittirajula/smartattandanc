@@ -69,11 +69,20 @@ function showProfile(name, role) {
                 const lat = position.coords.latitude;
                 const lon = position.coords.longitude;
                 try {
-                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=10`);
+                    const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lon}&zoom=18`);
                     const data = await response.json();
                     let locationName = "Unknown Location";
                     if (data && data.address) {
-                        locationName = data.address.city || data.address.town || data.address.county || data.address.state || "Location Found";
+                        const localArea = data.address.suburb || data.address.neighbourhood || data.address.residential || data.address.village || data.address.city_district || "";
+                        const city = data.address.city || data.address.town || data.address.county || "";
+                        
+                        if (localArea && city) {
+                            locationName = `${localArea}, ${city}`;
+                        } else if (localArea || city) {
+                            locationName = localArea || city;
+                        } else {
+                            locationName = data.address.state || "Location Found";
+                        }
                     }
                     locElement.innerHTML = `<i class="fas fa-map-marker-alt" style="color: #10B981;"></i> ${locationName}`;
                 } catch(e) {
